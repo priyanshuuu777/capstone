@@ -1,158 +1,588 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Rightmove – Simple Replica</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Rightmove - Find Your Dream Home</title>
+    
+    <style>
+        :root {
+            --bg-color: #96e8ff;
+            --text-color: #333;
+            --header-bg: #ffffff;
+            --card-bg: #ffffff;
+            --primary-color: #0066cc;
+            --secondary-color: #f0f0f0;
+            --border-color: #ddd;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+            --border-radius: 12px; 
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif; 
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+
+        header {
+            background-color: var(--header-bg);
+            padding: 15px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+            border-bottom-left-radius: var(--border-radius);
+            border-bottom-right-radius: var(--border-radius);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+ 
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            transition: background-color 0.3s ease;
+        }
+
+        nav a:hover {
+            background-color: var(--secondary-color);
+        }
+
+
+        .theme-toggle {
+            background: none;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 8px 12px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .hero {
+            padding: 60px 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.8;
+        }
+
+        /* Tab buttons - Buy, Rent, Sold */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .tab-button {
+            padding: 12px 24px;
+            border: none;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .tab-button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
+        /* Search form - where you type your search */
+        .search-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            justify-content: center;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        .form-group label {
+            margin-bottom: 5px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 12px;
+            border: 2px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+
+        .search-button {
+            padding: 12px 30px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .search-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,102,204,0.3);
+        }
+
+
+        .properties-section {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .section-title {
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 40px;
+            color: var(--primary-color);
+        }
+
+        .properties-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* Property card - each house listing */
+        .property-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .property-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            background-color: var(--secondary-color);
+        }
+
+        .property-info {
+            padding: 20px;
+        }
+
+        .property-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-bottom: 8px;
+        }
+
+        .property-location {
+            font-size: 16px;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            opacity: 0.8;
+        }
+
+        .property-description {
+            font-size: 14px;
+            color: var(--text-color);
+            opacity: 0.7;
+            line-height: 1.5;
+        }
+
+
+        .for-sale-ribbon {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        /* Info boxes section - extra services */
+        .info-boxes {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            padding: 0 20px;
+        }
+
+        .info-box {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .info-box:hover {
+            transform: translateY(-3px);
+        }
+
+        .info-box h3 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+            font-size: 20px;
+        }
+
+        .info-box p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+
+        footer {
+            background-color: var(--header-bg);
+            padding: 40px 20px 20px;
+            margin-top: 40px;
+            border-top-left-radius: var(--border-radius);
+            border-top-right-radius: var(--border-radius);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 30px;
+        }
+
+        .footer-column h4 {
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column a {
+            color: var(--text-color);
+            text-decoration: none;
+            opacity: 0.8;
+            line-height: 2;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer-column a:hover {
+            opacity: 1;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid var(--border-color);
+            opacity: 0.7;
+        }
+
+        /* Responsive design - makes it work on phones */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            nav ul {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 15px;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .search-form {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-group {
+                width: 100%;
+                max-width: 300px;
+            }
+
+            .properties-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .info-boxes {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tabs {
+                flex-direction: column;
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .tab-button {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
-  <div class="page-wrapper">
-
-    <!-- Header -->
-    <header class="site-header">
-      <div class="logo">Rightmove</div>
-
-      <nav class="main-nav">
-        <a href="#">Buy</a>
-        <a href="#">Rent</a>
-        <a href="#">Sell</a>
-        <a href="#">House Prices</a>
-        <a href="#">Commercial</a>
-        <a href="#">Sign in</a>
-      </nav>
-
-      <div class="clearfix"></div>
+    <!-- Header section with logo and navigation -->
+    <header>
+        <div class="header-container">
+            <a href="#" class="logo">🏠 SimpleMove</a>
+            <nav>
+                <ul>
+                    <li><a href="#">Buy</a></li>
+                    <li><a href="#">Rent</a></li>
+                    <li><a href="#">Sell</a></li>
+                    <li><a href="#">Sign in</a></li>
+                    <li><button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">🌙</button></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <!-- Hero Search Section -->
-    <section class="hero-search">
-      <h1 class="hero-title">Believe in finding it</h1>
-      <p class="hero-subtitle">Search the UK's largest choice of homes.</p>
+    <!-- Main content area -->
+    <main>
+        <!-- Hero section with search functionality -->
+        <section class="hero">
+            <h1>Find Your Dream Home</h1>
+            <p>Discover the perfect property from thousands of listings</p>
+            
+            <!-- Tab buttons for Buy/Rent/Sold -->
+            <div class="tabs">
+                <button class="tab-button active" onclick="switchTab(this, 'buy')">Buy</button>
+                <button class="tab-button" onclick="switchTab(this, 'rent')">Rent</button>
+                <button class="tab-button" onclick="switchTab(this, 'sold')">Sold</button>
+            </div>
 
-      <div class="search-tabs">
-        <span class="tab active">Buy</span>
-        <span class="tab">Rent</span>
-        <span class="tab">Sold prices</span>
-      </div>
+            <!-- Search form -->
+            <form class="search-form" onsubmit="handleSearch(event)">
+                <div class="form-group">
+                    <label for="location">Location</label>
+                    <input type="text" id="location" placeholder="Area, town, or postcode" aria-label="Search location">
+                </div>
+                <div class="form-group">
+                    <label for="listing-type">Listing Type</label>
+                    <select id="listing-type">
+                        <option>All properties</option>
+                        <option>Houses</option>
+                        <option>Flats</option>
+                        <option>Bungalows</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="min-price">Min Price</label>
+                    <select id="min-price">
+                        <option>No min</option>
+                        <option>£50,000</option>
+                        <option>£100,000</option>
+                        <option>£200,000</option>
+                        <option>£300,000</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="max-price">Max Price</label>
+                    <select id="max-price">
+                        <option>No max</option>
+                        <option>£200,000</option>
+                        <option>£300,000</option>
+                        <option>£500,000</option>
+                        <option>£1,000,000</option>
+                    </select>
+                </div>
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </section>
 
-      <form class="search-form">
-        <input type="text" class="search-input" placeholder="Search by area, town or postcode">
-        <select class="search-select">
-          <option>For sale</option>
-          <option>New homes</option>
-          <option>Shared ownership</option>
-        </select>
-        <select class="search-select">
-          <option>Min price</option>
-          <option>£100,000</option>
-          <option>£200,000</option>
-          <option>£300,000</option>
-        </select>
-        <select class="search-select">
-          <option>Max price</option>
-          <option>£300,000</option>
-          <option>£400,000</option>
-          <option>£500,000+</option>
-        </select>
-        <button type="submit" class="search-button">Search</button>
-      </form>
-    </section>
+        <!-- Featured properties section -->
+        <section class="properties-section">
+            <h2 class="section-title">Featured Properties</h2>
+            <div class="properties-grid">
+                <!-- Property card 1 -->
+                <div class="property-card">
+                    <img src="man.png" alt="Property 1" class="property-image">
+                    <div class="property-info">
+                        <div class="property-price">£275,000</div>
+                        <div class="property-location">📍 Manchester City Centre</div>
+                        <div class="property-description">Stunning 2-bedroom apartment with city views, modern kitchen, and balcony.</div>
+                    </div>
+                    <div class="for-sale-ribbon">For Sale</div>
+                </div>
 
-    <!-- Featured Properties -->
-    <section class="featured-section">
-      <h2 class="section-title">Featured properties</h2>
+                <!-- Property card 2 -->
+                <div class="property-card">
+                    <img src="image.png" alt="Property 2" class="property-image">
+                    <div class="property-info">
+                        <div class="property-price">£450,000</div>
+                        <div class="property-location">📍 London Suburbs</div>
+                        <div class="property-description">Beautiful 3-bedroom family home with garden, garage, and excellent schools nearby.</div>
+                    </div>
+                    <div class="for-sale-ribbon">For Sale</div>
+                </div>
 
-      <div class="property-card">
-        <img src="image.png" alt="Property" class="property-image">
-        <div class="property-content">
-          <p class="property-location">London, SW1A</p>
-          <p class="property-price">£950,000</p>
-          <p class="property-desc">Spacious 3 bedroom apartment with balcony and city views.</p>
+                <!-- Property card 3 -->
+                <div class="property-card">
+                    <img src="bis.png" alt="Property 3" class="property-image">
+                    <div class="property-info">
+                        <div class="property-price">£185,000</div>
+                        <div class="property-location">📍 Leeds</div>
+                        <div class="property-description">Cozy 1-bedroom flat perfect for first-time buyers or investors.</div>
+                    </div>
+                    <div class="for-sale-ribbon">For Sale</div>
+                </div>
+                    <div class="for-sale-ribbon">For Sale</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Info boxes section -->
+        <section class="info-boxes">
+            <div class="info-box">
+                <h3>Free Valuation</h3>
+                <p>Get a free property valuation from our expert agents. No obligation, just professional advice on your home's worth.</p>
+            </div>
+            <div class="info-box">
+                <h3>Mortgage Tools</h3>
+                <p>Use our mortgage calculator to find out how much you can borrow and get the best rates from top lenders.</p>
+            </div>
+            <div class="info-box">
+                <h3>Overseas Property</h3>
+                <p>Looking for property abroad? We have listings in Spain, France, Portugal, and other popular destinations.</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer section -->
+    <footer>
+        <div class="footer-content">
+            <div class="footer-column">
+                <h4>About Us</h4>
+                <ul>
+                    <li><a href="#">About SimpleMove</a></li>
+                    <li><a href="#">Careers</a></li>
+                    <li><a href="#">Press</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Property</h4>
+                <ul>
+                    <li><a href="#">House Prices</a></li>
+                    <li><a href="#">Market Trends</a></li>
+                    <li><a href="#">Property News</a></li>
+                    <li><a href="#">Guides</a></li>
+                </ul>
+            </div>
+            <div class="footer-column">
+                <h4>Help</h4>
+                <ul>
+                    <li><a href="#">Help Centre</a></li>
+                    <li><a href="#">Safety Center</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                </ul>
+            </div>
         </div>
-      </div>
-
-      <div class="property-card">
-        <img src="man.png" alt="Property" class="property-image">
-        <div class="property-content">
-          <p class="property-location">Manchester, M1</p>
-          <p class="property-price">£325,000</p>
-          <p class="property-desc">Modern 2 bedroom flat close to transport and local amenities.</p>
+        <div class="footer-bottom">
+            <p>&copy; 2024 SimpleMove. All rights reserved. Made by a 12th grade student!</p>
         </div>
-      </div>
-
-      <div class="property-card">
-        <img src="bis.png" alt="Property" class="property-image">
-        <div class="property-content">
-          <p class="property-location">Bristol, BS1</p>
-          <p class="property-price">£450,000</p>
-          <p class="property-desc">Charming townhouse with garden in a quiet residential street.</p>
-        </div>
-      <div>
-
-      <div class="clearfix"></div>
-    </section>
-
-    <!-- Info Boxes -->
-    <section class="info-section">
-      <div class="info-box">
-        <h3>Free home valuation</h3>
-        <p>Find out how much your home could be worth with a local expert.</p>
-        <a href="#" class="info-link">Get a valuation</a>
-      </div>
-
-      <div class="info-box">
-        <h3>Mortgage tools</h3>
-        <p>Estimate how much you could borrow and what your monthly payments might be.</p>
-        <a href="#" class="info-link">View mortgage tools</a>
-      </div>
-
-      <div class="info-box">
-        <h3>Overseas property</h3>
-        <p>Looking for a place in the sun? Explore homes for sale overseas.</p>
-        <a href="#" class="info-link">Search overseas</a>
-      </div>
-
-      <div class="clearfix"></div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="site-footer">
-      <div class="footer-column">
-        <h4>Search</h4>
-        <ul>
-          <li><a href="#">Homes for sale</a></li>
-          <li><a href="#">Homes to rent</a></li>
-          <li><a href="#">Sold house prices</a></li>
-          <li><a href="#">New homes</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-column">
-        <h4>Resources</h4>
-        <ul>
-          <li><a href="#">Buyer guides</a></li>
-          <li><a href="#">Seller guides</a></li>
-          <li><a href="#">Renter guides</a></li>
-          <li><a href="#">Mortgage guides</a></li>
-        </ul>
-      </div>
-
-      <div class="footer-column">
-        <h4>Rightmove</h4>
-        <ul>
-          <li><a href="#">About us</a></li>
-          <li><a href="#">Contact</a></li>
-          <li><a href="#">Careers</a></li>
-          <li><a href="#">Press</a></li>
-        </ul>
-      </div>
-
-      <div class="clearfix"></div>
-
-      <p class="footer-bottom">
-        © 2025 Rightmove replica. For educational purposes only.
-      </p>
     </footer>
+
+
+</body>
+</html>
 
   </div>
 </body>
