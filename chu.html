@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>HTML & CSS Demo — Tags, Forms, Tables, Positioning & Transitions</title>
+
+  <!-- ======== Internal CSS (demonstrates Internal - you could move to external styles.css) ======== -->
+  <style>
+    /* ---------- Reset & box-sizing (Box model + box-sizing) ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ---------- Page layout (block vs inline) ---------- */
+    body { font-family: Arial, sans-serif; line-height: 1.45; background: #f6f9fb; color: #123; padding: 20px; }
+
+    .container { width: 100%; max-width: 1000px; margin: 0 auto; background: #fff; border: 1px solid #e3e8eb; }
+
+    /* ---------- Header (html, head, body implied) ---------- */
+    header { background: linear-gradient(#00727a, #005a63); color: #fff; padding: 18px; overflow: auto; }
+    .logo { float: left; font-weight: 700; font-size: 20px; }
+    /* nav shows inline links (inline elements) */
+    nav { float: right; }
+    nav a { color: #fff; text-decoration: none; margin-left: 14px; font-size: 14px; }
+
+    /* ---------- Hero: headings, p, links ---------- */
+    .hero { padding: 20px; border-bottom: 1px solid #eef6f7; }
+    h1 { font-size: 26px; color: #0b3942; margin-bottom: 6px; }           /* h1..h6 demonstration */
+    h2 { font-size: 20px; color: #0c4b55; margin: 16px 0 8px; }
+    p { margin-bottom: 10px; }                                             /* paragraph */
+
+    /* ---------- Tabs using inline-block (div vs span) ---------- */
+    .tabs { margin: 10px 0; }
+    .tab { display: inline-block; padding: 8px 12px; background: #fff; border: 1px solid #d6e9ea; border-radius: 4px; margin-right: 8px; }
+    .tab:hover { background: #eaf9f9; cursor: pointer; }
+
+    /* ---------- Search form (form, input, label, select, textarea, fieldset, legend) ---------- */
+    form.search { padding: 12px; background: #fff; border-top: 1px solid #eef6f7; border-bottom: 1px solid #eef6f7; }
+    .row { overflow: auto; }               /* simple float-clear technique */
+
+    .field { float: left; margin-right: 12px; }
+    .field.text { width: 46%; }
+    .field.select { width: 18%; }
+    .field.btn { width: 14%; }
+
+    input[type="text"], input[type="email"], select, textarea {
+      width: 100%; padding: 8px 10px; border: 1px solid #cfe6e7; border-radius: 4px; font-size: 14px;
+      /* transition for focus (transitions demo) */
+      transition: border-color 180ms ease, box-shadow 180ms ease;
+    }
+    /* pseudo-class :focus */
+    input:focus, textarea:focus, select:focus { border-color: #00a7a7; box-shadow: 0 0 6px rgba(0,167,167,0.12); outline: none; }
+
+    textarea { min-height: 80px; resize: vertical; }  /* demonstrates textarea */
+
+    /* label & accessibility */
+    label { display: block; margin-bottom: 6px; font-size: 13px; color: #0b3942; }
+
+    /* grouping form controls with fieldset+legend */
+    fieldset { border: 1px solid #e0eded; padding: 10px; border-radius: 4px; margin-bottom: 10px; background: #fcffff; }
+    legend { font-weight: 700; padding: 0 6px; }
+
+    /* submit button with transition + transform */
+    button[type="submit"] {
+      padding: 10px 14px; border: none; background: #008a8a; color: #fff; border-radius: 4px; cursor: pointer;
+      transition: background 200ms ease, transform 120ms ease; /* transition demonstration */
+    }
+    button[type="submit"]:hover { background: #006a6a; transform: translateY(-2px); } /* transform + transition */
+
+    /* ---------- Media tags (audio and video) ---------- */
+    .media { padding: 12px; background: #fcfdfd; border-top: 1px dashed #e0eaea; }
+    .media video, .media audio { width: 100%; max-width: 480px; display: block; margin-bottom: 8px; }
+
+    /* ---------- Lists (ul, ol, li) ---------- */
+    .lists { padding: 12px; }
+    ul { margin-left: 18px; margin-bottom: 8px; }   /* unordered list */
+    ol { margin-left: 18px; margin-bottom: 8px; }   /* ordered list */
+
+    /* ---------- Table (table, thead, tbody, tfoot, caption, caption-side) ---------- */
+    table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+    caption { caption-side: top; text-align: left; padding: 6px 0; font-weight: 700; color: #0b3942; }
+    thead th { text-align: left; background: #f3fbfb; padding: 8px; border-bottom: 1px solid #e1eced; }
+    tbody td { padding: 8px; border-bottom: 1px solid #f0f4f4; color: #274446; }
+    tfoot td { padding: 8px; font-size: 13px; color: #526c6a; }
+
+    /* ---------- Cards demonstrating div vs span & inline vs block ---------- */
+    .cards { padding: 14px; overflow: auto; }
+    .card { float: left; width: 32%; margin-right: 2%; background: #fff; border: 1px solid #e6eeef; border-radius: 4px; }
+    .card:last-child { margin-right: 0; }
+    .card img { width: 100%; height: 140px; display: block; object-fit: cover; }
+    .card .body { padding: 10px; }
+    .card .title { display: block; font-weight: 700; color: #083d3f; margin-bottom: 6px; } /* block-level title */
+    .card .tags { font-size: 12px; color: #007a78; } /* inline (span) tags used below */
+
+    /* tag elements inside a single line with span (inline) */
+    .tag { display: inline-block; padding: 4px 8px; background: #f1fffe; border: 1px solid #dff8f7; border-radius: 999px; margin-right: 6px; font-size: 12px; }
+
+    /* ---------- Positioning & z-index ---------- */
+    .sticky-note { position: relative; margin: 12px; }
+    .note { position: absolute; top: -12px; right: 18px; background: #fff8e1; border: 1px solid #f0e6b8; padding: 6px 8px; border-radius: 4px; z-index: 5; } /* relative parent + absolute child + z-index */
+
+    /* fixed element example (fixed to viewport) */
+    .fixed-top { position: fixed; left: 12px; top: 12px; background: rgba(0,138,138,0.92); color: #fff; padding: 6px 8px; border-radius: 4px; z-index: 999; font-size: 13px; }
+
+    /* ---------- Pseudo-elements & pseudo-classes ---------- */
+    .fancy::before { content: '★'; color: #ffb400; margin-right: 6px; } /* pseudo-element */
+    a:hover { text-decoration: underline; } /* pseudo-class */
+
+    /* ---------- CSS selectors: id, class, tag, universal, group, descendant ---------- */
+    /* example selectors used throughout: #id, .class, div p (descendant), ul li (child/descendant) */
+
+    /* ---------- Transitions on image opacity ---------- */
+    .card img { transition: transform 220ms ease, opacity 220ms ease; }
+    .card:hover img { transform: scale(1.03); opacity: 0.95; }
+
+    /* ---------- Accessibility tiny tweaks ---------- */
+    a { color: #006a6a; }
+
+    /* ---------- Responsive (basic) ---------- */
+    @media (max-width: 760px) {
+      .card { width: 100%; margin-right: 0; margin-bottom: 10px; }
+      .field { float: none; width: 100%; margin-right: 0; margin-bottom: 8px; }
+      nav { float: none; text-align: center; margin-top: 10px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- fixed element (position:fixed + z-index) -->
+  <div class="fixed-top">Fixed: Help</div>
+
+  <div class="container">
+
+    <!-- Header: logo (div) and nav (inline anchors) -->
+    <header>
+      <div class="logo">MySite (logo)</div>
+      <nav>
+        <a href="#features">Features</a>
+        <a href="#media">Media</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <!-- Hero with headings and tabs (h1..h6, p, span) -->
+    <section class="hero" id="features">
+      <h1>Demo: HTML & CSS concepts</h1>
+      <p>This page demonstrates tags, elements, lists, tables, forms, media and CSS features (including transitions).</p>
+
+      <div class="tabs">
+        <div class="tab">Buy</div>
+        <div class="tab active">Rent</div>
+        <div class="tab">Sold prices</div>
+      </div>
+
+      <!-- Search Form: form, label, input, select, textarea, fieldset, legend -->
+      <form class="search" action="/search" method="get">
+        <fieldset>
+          <legend>Property search</legend>
+
+          <div class="row">
+            <div class="field text">
+              <label for="q">Location</label>
+              <input id="q" name="q" type="text" placeholder="Town, city or postcode">
+            </div>
+
+            <div class="field select">
+              <label for="type">Type</label>
+              <select id="type" name="type">
+                <option>For sale</option>
+                <option>To rent</option>
+                <option>Shared ownership</option>
+              </select>
+            </div>
+
+            <div class="field select">
+              <label for="min">Min price</label>
+              <select id="min" name="min">
+                <option>Min price</option>
+                <option>£100,000</option>
+                <option>£200,000</option>
+              </select>
+            </div>
+
+            <div class="field btn">
+              <label>&nbsp;</label>
+              <button type="submit">Search</button>
+            </div>
+          </div>
+
+        </fieldset>
+
+        <fieldset>
+          <legend>Contact (optional)</legend>
+          <label for="msg">Message</label>
+          <textarea id="msg" name="msg" placeholder="Your message..."></textarea>
+          <label for="email">Email</label>
+          <input id="email" name="email" type="email" placeholder="you@example.com">
+        </fieldset>
+      </form>
+
+    </section>
+
+    <!-- Media: video & audio tags -->
+    <section class="media" id="media">
+      <h2 class="fancy">Media examples</h2>
+      <!-- video: uses controls attribute; demonstration only with sample placeholder video link (browser may block autoplay) -->
+      <video controls poster="https://via.placeholder.com/640x360?text=Video+Poster">
+        <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
+
+      <!-- audio -->
+      <audio controls>
+        <source src="https://interactive-examples.mdn.mozilla.net/media/examples/t-rex-roar.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+      </audio>
+    </section>
+
+    <!-- Lists -->
+    <section class="lists">
+      <h2>Lists</h2>
+      <p>Unordered list:</p>
+      <ul>
+        <li>Item A (uses &lt;ul&gt; &lt;li&gt;)</li>
+        <li>Item B</li>
+      </ul>
+
+      <p>Ordered list:</p>
+      <ol>
+        <li>First</li>
+        <li>Second</li>
+      </ol>
+    </section>
+
+    <!-- Table -->
+    <section>
+      <h2>Table</h2>
+      <table>
+        <caption>Sample table (caption-side is top by default)</caption>
+        <thead>
+          <tr><th>Location</th><th>Type</th><th>Price</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>London</td><td>Flat</td><td>£950,000</td></tr>
+          <tr><td>Manchester</td><td>Apartment</td><td>£325,000</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td colspan="3">Prices are illustrative only</td></tr>
+        </tfoot>
+      </table>
+    </section>
+
+    <!-- Cards: images (img tag), div vs span; transitions on images -->
+    <section class="cards">
+      <h2>Property cards (img, div, span)</h2>
+
+      <div class="card">
+        <img src="https://via.placeholder.com/600x400?text=Property+1" alt="Property 1 image">
+        <div class="body">
+          <span class="title">London, SW1A</span>
+          <div><span class="tag">3 bed</span> <span class="tag">Flat</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://via.placeholder.com/600x400?text=Property+2" alt="Property 2 image">
+        <div class="body">
+          <span class="title">Manchester, M1</span>
+          <div><span class="tag">2 bed</span> <span class="tag">Central</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <img src="https://via.placeholder.com/600x400?text=Property+3" alt="Property 3 image">
+        <div class="body">
+          <span class="title">Bristol, BS1</span>
+          <div><span class="tag">Townhouse</span> <span class="tag">Garden</span></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Positioning demo: relative parent + absolute child + z-index -->
+    <section class="sticky-note">
+      <h2>Positioning & z-index</h2>
+      <p>Below: the yellow note is absolutely positioned relative to this section.</p>
+      <div class="note">Note (absolute) — z-index:5</div>
+    </section>
+
+    <!-- Footer demonstrating grouping selectors -->
+    <footer id="contact" style="padding:12px; border-top:1px solid #eef6f7;">
+      <div style="font-size:13px; color:#466;">Contact: <a href="mailto:hello@example.com">hello@example.com</a></div>
+      <div style="margin-top:8px; font-size:12px; color:#6b7d84;">© Example demo</div>
+    </footer>
+
+  </div>
+
+</body>
+</html>
