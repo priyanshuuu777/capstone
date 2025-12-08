@@ -581,6 +581,28 @@
         </div>
     </footer>
 
+<script>
+
+let isDark = false;
+function toggleTheme() {
+    isDark = !isDark; 
+    document.body.style.backgroundColor = isDark ? "#1d1d1d" : "#96e8ff";
+    document.body.style.color = isDark ? "#ffffff" : "#333";
+}function switchTab(btn, mode) {
+    const allTabs = document.querySelectorAll('.tab-button');
+    allTabs.forEach(tab => tab.classList.remove('active'));
+    btn.classList.add('active');
+}
+try {
+    console.log(exampleLet); 
+    let exampleLet = "Hello";
+} catch(e) {
+    console.log("TDZ Error Caught for let ✔", e.message);
+}const home = { city: "London" };
+home.city = "Manchester";
+console.log(home);
+
+</script>
 
 </body>
 </html>
